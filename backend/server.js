@@ -5,6 +5,9 @@ require('dotenv').config()
 const express = require('express')
 const workoutRoutes = require('./routes/workouts')
 
+//'npm install mongoose'
+const mongoose = require('mongoose')
+
 //Start up the express app, and it's being stored in app
 const app = express()
 
@@ -41,7 +44,19 @@ app.use('/api/workouts/', workoutRoutes)
 //     console.log('listen on port 4000');
 // })
 //Can also run using the a script from 'package.json'. 'npm run dev'
-app.listen(process.env.PORT, () =>{
-    console.log('listen on port', process.env.PORT);
-})
+// app.listen(process.env.PORT, () =>{
+//     console.log('listen on port', process.env.PORT);
+// })
 
+//Connect to db
+//.then fires a function when it is complete
+//.catch to catch any error
+mongoose.connect(process.env.MONG_URI)
+    .then(() => {
+        app.listen(process.env.PORT, () =>{
+            console.log('connected to db and listening on port', process.env.PORT);
+        })
+    })
+    .catch((error) => {
+        console.log(error)
+    })
